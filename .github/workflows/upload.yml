@@ -15,8 +15,5 @@ jobs:
         AZURE_STORAGE_ACCOUNT: "testabcdefghij"
         AZURE_SAS_TOKEN: ${{ secrets.AZURE_SAS_TOKEN }}
       run: |
-        az storage blob list \
-          --container-name upstar \
-          --account-name $AZURE_STORAGE_ACCOUNT \
-          --sas-token $AZURE_SAS_TOKEN \
-          --output table
+        URL="https://testabcdefghij.blob.core.windows.net/upstar$SAS_TOKEN"
+        az storage blob list --auth-mode key --account-url $URL --output table
