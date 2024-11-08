@@ -19,5 +19,5 @@ jobs:
             az storage blob list \
             --container-name upstar \
             --account-name $AZURE_STORAGE_ACCOUNT \
-            --sas-token $SAS_TOKEN \
+            --sas-token $AZURE_SAS_TOKEN \
             --output table
