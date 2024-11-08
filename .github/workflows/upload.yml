@@ -1,0 +1,22 @@
+name: Connect to Azure Storage Account with SAS Token
+
+on: [push]
+
+jobs:
+  connect-azure-storage:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: List Blobs in Azure Storage Account
+      env:
+        AZURE_STORAGE_ACCOUNT: "testabcdefghij"
+        AZURE_SAS_TOKEN: ${{ secrets.AZURE_SAS_TOKEN }}
+      run: |
+        az storage blob list \
+          --container-name upstar \
+          --account-name $AZURE_STORAGE_ACCOUNT \
+          --sas-token $AZURE_SAS_TOKEN \
+          --output table
