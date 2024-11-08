@@ -5,6 +5,7 @@ on: [push]
 jobs:
   connect-azure-storage:
     runs-on: ubuntu-latest
+    environment: test
 
     steps:
     - name: Checkout repository
