@@ -16,4 +16,4 @@ jobs:
         AZURE_SAS_TOKEN: ${{ secrets.AZURE_SAS_TOKEN }}
       run: |
         URL="https://testabcdefghij.blob.core.windows.net/upstar?sp=racwdli&st=2024-11-08T22:52:26Z&se=2024-11-11T06:52:26Z&spr=https&sv=2022-11-02&sr=c&sig=f54n5jNB38Y43THVaE22J4IrgNi5FD%2FB%2Be3TutnvoW4%3D"
-        az storage blob list --auth-mode key --account-url $URL --output table
+         az storage blob list --container-name upstar --account-url $URL --output table
