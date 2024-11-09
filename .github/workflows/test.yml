@@ -1,0 +1,25 @@
+name: List Blobs in Storage Account using SAS Token
+
+on: [push]
+
+jobs:
+  list-blobs:
+    runs-on: ubuntu-latest
+    environment: test
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: List blobs using SAS token
+      run: |
+        export SAS_TOKEN=${{ secrets.AZURE_SAS_TOKEN }}
+        export STORAGE_ACCOUNT_NAME=testabcdefghij
+        export CONTAINER_NAME=testabcdefghij
+
+        az storage blob list \
+          --account-name $STORAGE_ACCOUNT_NAME \
+          --container-name $CONTAINER_NAME \
+          --sas-token $SAS_TOKEN \
+          --query "[].name" \
+          --output table
