@@ -1,0 +1,11 @@
+name: Run nslookup test
+
+on: [push]
+
+jobs:
+  nslookup-job:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Run nslookup
+      run: nslookup testabcdefghij.blob.core.windows.net
