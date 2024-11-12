@@ -1,28 +1,35 @@
-name: Upload File to Azure Function and Trigger Storage Upload
+name: Upload Artifact to Azure Blob Storage
 
 on:
-  workflow_dispatch:  # Manual trigger for testing
+  push:
+    branches:
+      - main  # Adjust to your branch name
+  workflow_dispatch:  # Allow for manual triggering
 
 jobs:
-  upload-file-and-trigger-function:
+  upload-artifact:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - name: Checkout the repository
+      uses: actions/checkout@v3
 
-    - name: Generate Artifact (Text File)
-      run: |
-        # Create a text file with content
-        echo "This is a test file content." > artifact.txt
-        echo "Artifact file generated."
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # Set this to your required Node.js version
 
-    - name: Upload File to Azure Function (Trigger Function)
+    - name: Install dependencies
+      run: npm install
+
+    - name: Send HTTP request to Azure Function
       run: |
-        FUNCTION_URL="https://uploadtesting.azurewebsites.net/api/HttpTrigger1?"
-        
-        curl -v -X POST "$FUNCTION_URL" \
-          -F "file=@artifact.txt" \
-          -H "Content-Type: multipart/form-data"
-        
-        echo "File sent to the function for upload."
+        curl -X POST https://uploadtesting.azurewebsites.net/api/HttpTrigger1? \
+        -H "Content-Type: application/json" \
+        -d '{
+            "file": "This is a simple text file content to upload."
+        }'
+
+    - name: Confirm upload success
+      run: |
+        echo "File uploaded successfully to Blob Storage."
