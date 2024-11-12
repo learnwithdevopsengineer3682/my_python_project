@@ -13,15 +13,7 @@ jobs:
     steps:
     - name: Checkout the repository
       uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '16'  # Set this to your required Node.js version
-
-    - name: Install dependencies
-      run: npm install
-
+      
     - name: Send HTTP request to Azure Function
       run: |
         curl -X POST https://uploadtesting.azurewebsites.net/api/HttpTrigger1? \
