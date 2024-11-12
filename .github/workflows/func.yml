@@ -21,7 +21,7 @@ jobs:
       run: |
         FUNCTION_URL="https://functapp.azurewebsites.net/api/http_trigger3?"
         
-        curl -X -v POST "$FUNCTION_URL" \
+        curl -v -X POST "$FUNCTION_URL" \
           -F "file=@artifact.txt" \
           -H "Content-Type: multipart/form-data"
         
