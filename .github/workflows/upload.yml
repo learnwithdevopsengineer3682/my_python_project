@@ -1,23 +1,28 @@
-name: Connect to Azure Storage Account with SAS Token
+name: Test Function App Access Without Key
 
-on: [push]
+on:
+  workflow_dispatch:  # Trigger manually for testing purposes
 
 jobs:
-  connect-azure-storage:
+  test-function-access:
     runs-on: ubuntu-latest
-    environment: test
 
     steps:
-    - name: Checkout repository
+    - name: Checkout Code
       uses: actions/checkout@v2
 
-    - name: List Blobs in Azure Storage Account
-      env:
-        AZURE_STORAGE_ACCOUNT: "testabcdefghij"
-        AZURE_SAS_TOKEN: ${{ secrets.AZURE_SAS_TOKEN }}
+    - name: Test Function App Access Without Key
       run: |
-            az storage blob list \
-            --container-name upstar \
-            --account-name $AZURE_STORAGE_ACCOUNT \
-            --sas-token $AZURE_SAS_TOKEN \
-            --output table
+        # Define the Function App URL (replace with your actual function URL)
+        FUNCTION_URL="https://functapp.azurewebsites.net/api/http_trigger1?"
+
+        # Send a GET request to the function (no key required for Anonymous)
+        RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" "$FUNCTION_URL")
+
+        # Check if the function was successfully accessed (status code 200)
+        if [ "$RESPONSE" -eq 200 ]; then
+          echo "Function App access test successful! Status code: $RESPONSE"
+        else
+          echo "Failed to access Function App. Status code: $RESPONSE"
+          exit 1
+        fi
