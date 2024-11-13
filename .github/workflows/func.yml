@@ -1,27 +1,28 @@
-name: Upload Artifact to Azure Blob Storage
+# .github/workflows/upload-artifact.yml
+name: Upload Artifact
 
 on:
-  push:
-    branches:
-      - main  # Adjust to your branch name
-  workflow_dispatch:  # Allow for manual triggering
+  workflow_dispatch:
+    inputs:
+      file_name:
+        description: "The name of the file to upload"
+        required: true
+        default: "example.txt"
 
 jobs:
-  upload-artifact:
+  upload_file:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout the repository
-      uses: actions/checkout@v3
-      
-    - name: Send HTTP request to Azure Function
-      run: |
-        curl -X POST https://fungithubrunner.azurewebsites.net/api/http_trigger1? \
-        -H "Content-Type: application/json" \
-        -d '{
-            "file": "This is a simple text file content to upload."
-        }'
+    - name: Prepare file for upload
+      run: echo "This is a sample file content" > ${{ github.event.inputs.file_name }}
 
-    - name: Confirm upload success
+    - name: Upload file to Azure Function
+      env:
+        FUNCTION_URL: "https://fungithubrunner.azurewebsites.net/api/http_trigger1?"  # URL of your Azure Function
       run: |
-        echo "File uploaded successfully to Blob Storage."
+        curl -X POST "$FUNCTION_URL?file_name=${{ github.event.inputs.file_name }}" \
+          -H "Content-Type: application/octet-stream" \
+          --data-binary "@${{ github.event.inputs.file_name }}"
+
+  
