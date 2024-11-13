@@ -21,14 +21,17 @@ jobs:
       env:
         FUNCTION_URL: "https://fungithubrunner.azurewebsites.net/api/http_trigger1?"  # URL of your Azure Function
       run: |
-        curl -X POST https://<YOUR_FUNCTION_URL>/api/upload \
+        echo "Uploading file to Azure Function..."
+        curl -X POST "${FUNCTION_URL}/api/upload" \
         -H "Content-Type: text/plain" \
         -d "This is a sample text file content being uploaded to Azure Function."
 
     - name: Check response
+      env:
+        FUNCTION_URL: "https://fungithubrunner.azurewebsites.net/api/http_trigger1?"  # Use the same environment variable
       run: |
-        # Assuming the Azure Function response returns status 200 on success
-        curl -X POST https://<YOUR_FUNCTION_URL>/api/upload \
+        echo "Checking response from Azure Function..."
+        curl -X POST "${FUNCTION_URL}/api/upload" \
         -H "Content-Type: text/plain" \
         -d "Sample text for testing Azure Function."
 
