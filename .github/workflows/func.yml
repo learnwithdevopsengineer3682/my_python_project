@@ -16,7 +16,7 @@ jobs:
       
     - name: Send HTTP request to Azure Function
       run: |
-        curl -X POST https://uploadtesting.azurewebsites.net/api/HttpTrigger1? \
+        curl -X POST https://fungithubrunner.azurewebsites.net/api/http_trigger1? \
         -H "Content-Type: application/json" \
         -d '{
             "file": "This is a simple text file content to upload."
