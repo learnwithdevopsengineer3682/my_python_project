@@ -21,8 +21,14 @@ jobs:
       env:
         FUNCTION_URL: "https://fungithubrunner.azurewebsites.net/api/http_trigger1?"  # URL of your Azure Function
       run: |
-        curl -X POST "$FUNCTION_URL?file_name=${{ github.event.inputs.file_name }}" \
+        response=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$FUNCTION_URL?file_name=${{ github.event.inputs.file_name }}" \
           -H "Content-Type: application/octet-stream" \
-          --data-binary "@${{ github.event.inputs.file_name }}"
+          --data-binary "@${{ github.event.inputs.file_name }}")
+        if [ "$response" -eq 200 ]; then
+          echo "File uploaded successfully."
+        else
+          echo "File upload failed with response code $response."
+          exit 1
+        fi
 
   
